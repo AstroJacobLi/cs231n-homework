@@ -1,0 +1,16 @@
+for i in range(num_train):
+        scores = X[i].dot(W) # calculate score 
+        # Calculate gradient array
+        p_score_p_W = np.zeros((num_classes, D, num_classes))
+        for z in range(10):
+            p_score_p_W[z][:, z] = X[i][z]
+        
+        correct_class_score = scores[y[i]]
+        for j in range(num_classes):
+            if j == y[i]:
+                continue
+            margin = scores[j] - correct_class_score + 1 # note delta = 1
+            grad_diff = p_score_p_W[j] - p_score_p_W[y[i]] # margin here is matrix of shape (D, C)
+            if margin > 0:
+                loss += margin
+                dW += margin
