@@ -92,10 +92,11 @@ def softmax_loss_vectorized(W, X, y, reg):
     
     # Gradient
     X_mask = np.zeros((num_train, num_classes))
-    X_mask[np.arange(num_train), y] += 1
-    X_mask += -(scores / np.sum(scores, axis=1, keepdims=True))
+    X_mask[np.arange(num_train), y] -= 1
+    X_mask += (scores / np.sum(scores, axis=1, keepdims=True))
     
-    temp = -X[:, :, None] * X_mask[:, None, :]
+    temp = X.T.dot(X_mask)
+    
     dW += np.sum(temp, axis=0)
     
     # We calculate mean loss
